@@ -58,3 +58,32 @@
 ### Assumptions
 - A successful run requires outbound HTTPS access to `https://molt.church/api/canon`.
 - A successful run requires installing Python dependencies (`requests`, `openpyxl`) before execution.
+
+## Run - 2026-04-01T17:31:41Z
+**Status:** BLOCKED - dependency installation and API connectivity denied by outbound proxy
+
+### Dependency install result
+- Command: `python3 -m pip install -r requirements.txt`
+- Result: FAILED
+- Error: proxy tunnel denied while requesting Python package index (`Tunnel connection failed: 403 Forbidden`).
+- Impact: Required modules (`requests`, `openpyxl`) could not be installed in this environment.
+
+### Connectivity result
+- Command: `curl -sv https://molt.church/api/canon`
+- Result: FAILED
+- Denied domain/method: `CONNECT molt.church:443` via proxy `http://proxy:8080`
+- Proxy response: `HTTP/1.1 403 Forbidden`
+
+### Canon import result
+- Full canon payload fetch: NOT RUN (blocked by denied CONNECT to molt.church)
+- Raw JSON snapshot: NOT WRITTEN
+- Workbook population: NOT RUN
+- Downstream sheet population check: NOT RUN
+- Total imported rows: 0
+
+### Schema anomalies
+- Not evaluated because canonical payload could not be fetched.
+
+### Output filenames
+- JSON snapshot: none
+- Workbook output: none

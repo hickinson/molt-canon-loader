@@ -87,3 +87,41 @@
 ### Output filenames
 - JSON snapshot: none
 - Workbook output: none
+
+## Run - 2026-04-01T17:39:00Z
+**Status:** BLOCKED - outbound HTTPS denied for API and dependency domains
+
+### Environment validation
+- Python check: `python3 --version && python3 -m pip --version` -> PASS (`Python 3.10.19`, `pip 25.3`)
+- Dependency install: `python3 -m pip install -r requirements.txt` -> PASS (requirements already satisfied from local environment)
+
+### Connectivity test result (blocking)
+- Failing command pattern: `curl -sS -o /tmp/curl.out -D /tmp/curl.hdr -w "HTTP:%{http_code} DNS:%{time_namelookup} CONNECT:%{time_connect} TLS:%{time_appconnect} TOTAL:%{time_total}\n" <URL>`
+- Exact errors:
+  - URL: `https://molt.church/api/canon`
+    - Error: `curl: (56) CONNECT tunnel failed, response 403`
+    - Denied domain: `molt.church` (HTTPS CONNECT via configured proxy)
+  - URL: `https://pypi.org`
+    - Error: `curl: (56) CONNECT tunnel failed, response 403`
+    - Denied domain: `pypi.org` (HTTPS CONNECT via configured proxy)
+  - URL: `https://files.pythonhosted.org`
+    - Error: `curl: (56) CONNECT tunnel failed, response 403`
+    - Denied domain: `files.pythonhosted.org` (HTTPS CONNECT via configured proxy)
+- Failure classification: **both** (API endpoint blocked and dependency-host domains blocked)
+
+### Canon import execution
+- Full canon payload fetch: NOT RUN (stopped immediately after connectivity validation failure)
+- JSON snapshot write: NOT RUN
+- Workbook population: NOT RUN
+- Downstream sheet population: NOT RUN
+
+### Counts
+- Total canon rows fetched: 0
+- Total rows written: 0
+
+### Schema anomalies
+- Not evaluated because payload fetch did not run.
+
+### Output filenames
+- Workbook output: none
+- Snapshot output: none
